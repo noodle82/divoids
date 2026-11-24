@@ -1,0 +1,13 @@
+{
+  "appId": "com.divoids.division",
+  "appName": "Divoids",
+  "webDir": "dist",
+  "server": {
+    "hostname": "localhost",
+    "iosScheme": "capacitor"
+  },
+  "ios": {
+    "backgroundColor": "#152b29",
+    "contentInset": "automatic"
+  }
+}

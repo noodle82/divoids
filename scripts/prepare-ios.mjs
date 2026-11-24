@@ -1,0 +1,5 @@
+import fs from'node:fs';import path from'node:path';import{execFileSync}from'node:child_process';import{fileURLToPath}from'node:url';import{nativeSettings,configureNativeProject}from'./native-project.mjs';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');process.chdir(root);const settings=nativeSettings(root);
+if(process.argv.includes('--check')){console.log('Validated Divoids',settings.config.appId,'version',settings.pkg.version,'build',settings.buildNumber);process.exit(0);}
+if(process.platform!=='darwin')throw Error('Create the signed iOS app on Codemagic’s macOS build machine. Run npm run build for a local web build.');
+const run=args=>execFileSync(process.execPath,args,{cwd:root,stdio:'inherit'}),cap=path.join(root,'node_modules/@capacitor/cli/bin/capacitor');run(['scripts/stage-web.mjs']);if(!fs.existsSync(path.join(root,'ios/App/App.xcodeproj')))run([cap,'add','ios','--packagemanager','CocoaPods']);run([cap,'sync','ios']);configureNativeProject(root,path.join(root,'ios'),settings);console.log('Prepared offline Divoids for iPhone and iPad. Version',settings.pkg.version,'build',settings.buildNumber);
